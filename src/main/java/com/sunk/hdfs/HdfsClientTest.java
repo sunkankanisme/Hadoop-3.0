@@ -1,4 +1,4 @@
-package com.sunk;
+package com.sunk.hdfs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
