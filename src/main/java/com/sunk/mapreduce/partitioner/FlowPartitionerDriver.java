@@ -1,6 +1,8 @@
-package com.sunk.mapreduce.serializable;
+package com.sunk.mapreduce.partitioner;
 
-import com.sunk.mapreduce.partitioner.ProvincePartitioner;
+import com.sunk.mapreduce.serializable.FlowBean;
+import com.sunk.mapreduce.serializable.FlowMapper;
+import com.sunk.mapreduce.serializable.FlowReducer;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -9,12 +11,12 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
-public class FlowDriver {
+public class FlowPartitionerDriver {
 
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         final Job job = Job.getInstance();
 
-        job.setJarByClass(FlowDriver.class);
+        job.setJarByClass(FlowPartitionerDriver.class);
 
         job.setMapperClass(FlowMapper.class);
         job.setReducerClass(FlowReducer.class);
@@ -27,6 +29,16 @@ public class FlowDriver {
 
         FileInputFormat.setInputPaths(job, "D:\\workspace\\my\\Hadoop-3.0\\src\\main\\resources\\phone_data.txt");
         FileOutputFormat.setOutputPath(job, new Path("D:\\system\\desktop\\mapreduce"));
+
+        /*
+         * 使用自定义的分区器
+         */
+        job.setPartitionerClass(ProvincePartitioner.class);
+
+        /*
+         * 设置 Reduce 个数
+         */
+        job.setNumReduceTasks(5);
 
         job.waitForCompletion(true);
     }
