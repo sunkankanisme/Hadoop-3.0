@@ -1,5 +1,6 @@
 package com.sunk.mapreduce.serializable;
 
+import com.sunk.mapreduce.partitioner.ProvincePartitioner;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -26,6 +27,16 @@ public class FlowDriver {
 
         FileInputFormat.setInputPaths(job, "D:\\workspace\\my\\Hadoop-3.0\\src\\main\\resources\\phone_data.txt");
         FileOutputFormat.setOutputPath(job, new Path("D:\\system\\desktop\\mapreduce"));
+
+        /*
+         * 使用自定义的分区器
+         */
+        job.setPartitionerClass(ProvincePartitioner.class);
+
+        /*
+         * 设置 Reduce 个数
+         */
+        job.setNumReduceTasks(5);
 
         job.waitForCompletion(true);
     }
